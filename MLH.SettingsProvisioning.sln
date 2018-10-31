@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mmu.Mlh.SettingsProvisioning", "Sources\Mmu.Mlh.SettingsProvisioning\Mmu.Mlh.SettingsProvisioning.csproj", "{38222643-C8E0-430E-B947-D529B8C1882A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mmu.Mlh.SettingsProvisioning.UnitTests", "Sources\Mmu.Mlh.SettingsProvisioning.UnitTests\Mmu.Mlh.SettingsProvisioning.UnitTests.csproj", "{F170C88E-FA80-4B09-A898-4A7BC4906736}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38222643-C8E0-430E-B947-D529B8C1882A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38222643-C8E0-430E-B947-D529B8C1882A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38222643-C8E0-430E-B947-D529B8C1882A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38222643-C8E0-430E-B947-D529B8C1882A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F170C88E-FA80-4B09-A898-4A7BC4906736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F170C88E-FA80-4B09-A898-4A7BC4906736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F170C88E-FA80-4B09-A898-4A7BC4906736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F170C88E-FA80-4B09-A898-4A7BC4906736}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1126F935-127F-45EA-AF2D-E34506F825A6}
+	EndGlobalSection
+EndGlobal
