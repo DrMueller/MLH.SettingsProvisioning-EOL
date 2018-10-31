@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mmu.Mlh.SettingsProvisioning\Mmu.Mlh.SettingsProvisioning.csproj" />
+    <ProjectReference Include="..\Application\Mmu.Mlh.SettingsProvisioning.csproj" />
   </ItemGroup>
 
 </Project>
