@@ -56,34 +56,3 @@ phases:
       command: push
 
       publishVstsFeed: '3c2d9c9a-d8f7-42f4-b7a3-dddf4064110a'
-
-
-
-- phase: Phase_2
-  displayName: Create Release Work Item
-
-  dependsOn: Phase_1
-  condition: succeeded()
-  server: true
-  variables:
-    ParentWorkItemId: '225'
-  steps:
-  - task: AzureFunction@1
-    displayName: 'Create Release Work Item'
-    inputs:
-      function: 'https://tfsreleasemanagementsystem.azurewebsites.net/api/CreateRelease'
-
-      key: 'KCw8zHoDdJ2lGj2VzaHCaywIVZTGyT8MldAkAlcdFb63V9ephxuA1A=='
-
-      headers: |  
-       {
-       "Content-Type":"application/json"
-       }
-
-      body: |  
-       {
-           "buildId": $(Build.BuildId),
-           "buildVersion": "$(Build.BuildNumber)",
-           "parentWorkItemId": $(ParentWorkItemId)
-       }
-
