@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.IO.Abstractions;
+using Microsoft.Extensions.Configuration;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories.Implementation;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories.Servants;
 using Mmu.Mlh.SettingsProvisioning.Areas.Models;
@@ -13,6 +14,7 @@ namespace Mmu.Mlh.SettingsProvisioning.UnitTests.TestingAreas.Areas.Factories
     {
         private Mock<IConfigurationRootFactory> _configurationRootFactoryMock;
         private Mock<IDirectorySearchServant> _directorySearchServantMock;
+        private Mock<IFileSystem> _fileSystemMock;
         private Mock<ISectionConfigurationServant> _sectionConfigurationServantMock;
         private SettingsFactory _sut;
 
@@ -22,11 +24,13 @@ namespace Mmu.Mlh.SettingsProvisioning.UnitTests.TestingAreas.Areas.Factories
             _directorySearchServantMock = new Mock<IDirectorySearchServant>();
             _configurationRootFactoryMock = new Mock<IConfigurationRootFactory>();
             _sectionConfigurationServantMock = new Mock<ISectionConfigurationServant>();
+            _fileSystemMock = new Mock<IFileSystem>();
 
             _sut = new SettingsFactory(
                 _directorySearchServantMock.Object,
                 _configurationRootFactoryMock.Object,
-                _sectionConfigurationServantMock.Object);
+                _sectionConfigurationServantMock.Object,
+                _fileSystemMock.Object);
         }
 
         [Test]
@@ -36,29 +40,13 @@ namespace Mmu.Mlh.SettingsProvisioning.UnitTests.TestingAreas.Areas.Factories
             const string SettingsPath = @"C:\Users\appsettings.json";
             _directorySearchServantMock.Setup(f => f.SearchAppSettings(It.IsAny<string>()))
                 .Returns(new AppSettingsSearchResult(true, SettingsPath));
+            var config = new SettingsConfiguration("Test", "Test1", string.Empty);
 
             // Act
-            _sut.CreateSettings<object>("Test", "Test1", string.Empty);
+            _sut.CreateSettings<object>(config);
 
             // Assert
             _configurationRootFactoryMock.Verify(f => f.Create(SettingsPath, It.IsAny<string>()));
-        }
-
-        [Test]
-        public void CreatingSettings_Calls_SectionConfigurationServant_WithPassedSectionKey()
-        {
-            // Arrange
-            const string SectionKey = "Tra";
-            _directorySearchServantMock.Setup(f => f.SearchAppSettings(It.IsAny<string>()))
-                .Returns(new AppSettingsSearchResult(true, "tra"));
-
-            // Act
-            _sut.CreateSettings<object>(SectionKey, string.Empty, string.Empty);
-
-            // Assert
-            _sectionConfigurationServantMock.Verify(f => f.ConfigureFromSection<object>(
-                It.IsAny<IConfigurationRoot>(),
-                SectionKey));
         }
 
         [Test]
@@ -68,12 +56,31 @@ namespace Mmu.Mlh.SettingsProvisioning.UnitTests.TestingAreas.Areas.Factories
             const string BasePath = @"C:\Users\";
             _directorySearchServantMock.Setup(f => f.SearchAppSettings(It.IsAny<string>()))
                 .Returns(new AppSettingsSearchResult(true, "tra"));
+            var config = new SettingsConfiguration("Test", "Test1", BasePath);
 
             // Act
-            _sut.CreateSettings<object>("Test", "Test1", BasePath);
+            _sut.CreateSettings<object>(config);
 
             // Assert
             _directorySearchServantMock.Verify(f => f.SearchAppSettings(BasePath));
+        }
+
+        [Test]
+        public void CreatingSettings_Calls_SectionConfigurationServant_WithPassedSectionKey()
+        {
+            // Arrange
+            const string SectionKey = "Tra";
+            _directorySearchServantMock.Setup(f => f.SearchAppSettings(It.IsAny<string>()))
+                .Returns(new AppSettingsSearchResult(true, "tra"));
+            var config = new SettingsConfiguration(SectionKey, string.Empty, string.Empty);
+
+            // Act
+            _sut.CreateSettings<object>(config);
+
+            // Assert
+            _sectionConfigurationServantMock.Verify(f => f.ConfigureFromSection<object>(
+                It.IsAny<IConfigurationRoot>(),
+                SectionKey));
         }
 
         [Test]
@@ -83,9 +90,10 @@ namespace Mmu.Mlh.SettingsProvisioning.UnitTests.TestingAreas.Areas.Factories
             const string BasePath = @"C:\Users\";
             _directorySearchServantMock.Setup(f => f.SearchAppSettings(It.IsAny<string>()))
                 .Returns(new AppSettingsSearchResult(false, "tra"));
+            var config = new SettingsConfiguration("Test", "Test1", BasePath);
 
             // Act & Assert
-            Assert.Throws<AppSettingsNotFoundException>(() => _sut.CreateSettings<object>("Test", "Test1", BasePath));
+            Assert.Throws<AppSettingsNotFoundException>(() => _sut.CreateSettings<object>(config));
         }
 
         [Test]
@@ -95,10 +103,11 @@ namespace Mmu.Mlh.SettingsProvisioning.UnitTests.TestingAreas.Areas.Factories
             const string BasePath = @"C:\Users\";
             _directorySearchServantMock.Setup(f => f.SearchAppSettings(It.IsAny<string>()))
                 .Returns(new AppSettingsSearchResult(false, "tra"));
+            var config = new SettingsConfiguration("Test", "Test1", BasePath);
 
             // Act & Assert
             Assert.That(
-                () => _sut.CreateSettings<object>("Test", "Test1", BasePath),
+                () => _sut.CreateSettings<object>(config),
                 Throws.TypeOf<AppSettingsNotFoundException>().With.Message.EqualTo(BasePath));
         }
     }

@@ -1,8 +1,10 @@
-﻿namespace Mmu.Mlh.SettingsProvisioning.Areas.Factories
+﻿using Mmu.Mlh.SettingsProvisioning.Areas.Models;
+
+namespace Mmu.Mlh.SettingsProvisioning.Areas.Factories
 {
     public interface ISettingsFactory
     {
-        TSettings CreateSettings<TSettings>(string settingsSectionKey, string environmentName, string baseDirectoryOrFilePath)
+        TSettings CreateSettings<TSettings>(SettingsConfiguration config)
             where TSettings : class, new();
     }
 }
