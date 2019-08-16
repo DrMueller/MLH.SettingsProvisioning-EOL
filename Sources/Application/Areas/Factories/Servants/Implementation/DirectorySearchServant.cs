@@ -49,6 +49,15 @@ namespace Mmu.Mlh.SettingsProvisioning.Areas.Factories.Servants.Implementation
 
         private string AlignBaseDirectory(string baseDirectoryOrFilePath)
         {
+            if (!_fileSystem.File.Exists(baseDirectoryOrFilePath))
+            {
+                var seperator = _fileSystem.Path.DirectorySeparatorChar.ToString();
+                if (!baseDirectoryOrFilePath.EndsWith(seperator, StringComparison.Ordinal))
+                {
+                    baseDirectoryOrFilePath += seperator;
+                }
+            }
+
             var uri = new UriBuilder(baseDirectoryOrFilePath);
             var unescapedUri = Uri.UnescapeDataString(uri.Path);
             var directoryName = _fileSystem.Path.GetDirectoryName(unescapedUri);
