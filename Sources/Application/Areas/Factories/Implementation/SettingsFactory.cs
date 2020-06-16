@@ -56,12 +56,12 @@ namespace Mmu.Mlh.SettingsProvisioning.Areas.Factories.Implementation
 
         private FunctionResult<string> SearchDropboxBasePath()
         {
-            const string dropboxInfoPath = @"Dropbox\info.json";
-            var jsonPath = _fileSystem.Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), dropboxInfoPath);
+            const string DropboxInfoPath = @"Dropbox\info.json";
+            var jsonPath = _fileSystem.Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), DropboxInfoPath);
 
             if (!_fileSystem.File.Exists(jsonPath))
             {
-                jsonPath = _fileSystem.Path.Combine(Environment.GetEnvironmentVariable("AppData"), dropboxInfoPath);
+                jsonPath = _fileSystem.Path.Combine(Environment.GetEnvironmentVariable("AppData"), DropboxInfoPath);
             }
 
             if (!_fileSystem.File.Exists(jsonPath))

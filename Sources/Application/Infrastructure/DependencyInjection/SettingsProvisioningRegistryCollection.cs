@@ -1,20 +1,20 @@
 ﻿using System.IO.Abstractions;
+using Lamar;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories.Implementation;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories.Servants;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories.Servants.Implementation;
-using StructureMap;
 
 namespace Mmu.Mlh.SettingsProvisioning.Infrastructure.DependencyInjection
 {
-    public class SettingsProvisioningRegistry : Registry
+    public class SettingsProvisioningRegistryCollection : ServiceRegistry
     {
-        public SettingsProvisioningRegistry()
+        public SettingsProvisioningRegistryCollection()
         {
             Scan(
                 scanner =>
                 {
-                    scanner.AssemblyContainingType<SettingsProvisioningRegistry>();
+                    scanner.AssemblyContainingType<SettingsProvisioningRegistryCollection>();
                     scanner.WithDefaultConventions();
                 });
 
