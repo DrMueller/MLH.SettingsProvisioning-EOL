@@ -1,9 +1,9 @@
-name: 1.2$(rev:.r) # build numbering format
+name: 1.3$(rev:.r) # build numbering format
 
 variables:
   BuildConfiguration: 'Release'
   FolderToPack: 'Application'
-  SolutionName: 'MLH.SettingsProvisioning.sln' 
+  SolutionName: 'MLH.SettingsProvisioning.sln'
   ApplicationSubPath: 'MLH.SettingsProvisioning' # The logic doesn't use the full repository name, therefore we cant use the build variable
   ReSharperSettingsFileName: 'CISettings_NuGet.DotSettings'
 
@@ -14,7 +14,7 @@ resources:
     name: DrMueller/ALMStuff
     ref: refs/heads/master
     endpoint: GitHub-DrMueller
-
+    
 jobs:
 - job: 'BuildAndPublishToNuGet'
   displayName: 'Build and publish to NuGet'

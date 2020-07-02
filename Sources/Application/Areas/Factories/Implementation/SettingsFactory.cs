@@ -1,6 +1,5 @@
-﻿using System;
-using System.IO.Abstractions;
-using Mmu.Mlh.LanguageExtensions.Areas.Types.FunctionsResults;
+﻿using System.IO.Abstractions;
+using Mmu.Mlh.ApplicationExtensions.Areas.Dropbox.Services;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories.Servants;
 using Mmu.Mlh.SettingsProvisioning.Areas.Models;
 using Mmu.Mlh.SettingsProvisioning.Infrastructure.Exceptions;
@@ -11,6 +10,7 @@ namespace Mmu.Mlh.SettingsProvisioning.Areas.Factories.Implementation
     {
         private readonly IConfigurationRootFactory _configurationRootFactory;
         private readonly IDirectorySearchServant _directorySearchServant;
+        private readonly IDropboxLocator _dropboxLocator;
         private readonly IFileSystem _fileSystem;
         private readonly ISectionConfigurationServant _sectionConfigurationServant;
 
@@ -18,11 +18,13 @@ namespace Mmu.Mlh.SettingsProvisioning.Areas.Factories.Implementation
             IDirectorySearchServant directorySearchServant,
             IConfigurationRootFactory configurationRootFactory,
             ISectionConfigurationServant sectionConfigurationServant,
+            IDropboxLocator dropboxLocator,
             IFileSystem fileSystem)
         {
             _directorySearchServant = directorySearchServant;
             _configurationRootFactory = configurationRootFactory;
             _sectionConfigurationServant = sectionConfigurationServant;
+            _dropboxLocator = dropboxLocator;
             _fileSystem = fileSystem;
         }
 
@@ -54,25 +56,6 @@ namespace Mmu.Mlh.SettingsProvisioning.Areas.Factories.Implementation
             return appSettingsSearchResult;
         }
 
-        private FunctionResult<string> SearchDropboxBasePath()
-        {
-            const string DropboxInfoPath = @"Dropbox\info.json";
-            var jsonPath = _fileSystem.Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), DropboxInfoPath);
-
-            if (!_fileSystem.File.Exists(jsonPath))
-            {
-                jsonPath = _fileSystem.Path.Combine(Environment.GetEnvironmentVariable("AppData"), DropboxInfoPath);
-            }
-
-            if (!_fileSystem.File.Exists(jsonPath))
-            {
-                return FunctionResult.CreateFailure<string>();
-            }
-
-            var dropboxPath = _fileSystem.File.ReadAllText(jsonPath).Split('\"')[5].Replace(@"\\", @"\");
-            return FunctionResult.CreateSuccess(dropboxPath);
-        }
-
         private AppSettingsSearchResult SearchDropboxSettings(SettingsConfiguration config)
         {
             if (string.IsNullOrEmpty(config.DropboxRelativePath))
@@ -80,15 +63,13 @@ namespace Mmu.Mlh.SettingsProvisioning.Areas.Factories.Implementation
                 return new AppSettingsSearchResult(false, string.Empty);
             }
 
-            var dropboxBasePathSearchResult = SearchDropboxBasePath();
-            if (!dropboxBasePathSearchResult.IsSuccess)
+            var dropboxPath = _dropboxLocator.LocateDropboxPath().Reduce(() => string.Empty);
+            if (string.IsNullOrEmpty(dropboxPath))
             {
                 return new AppSettingsSearchResult(false, string.Empty);
             }
 
-            var relativeDropboxPath = _fileSystem.Path.Combine(
-                dropboxBasePathSearchResult.Value,
-                config.DropboxRelativePath);
+            var relativeDropboxPath = _fileSystem.Path.Combine(dropboxPath, config.DropboxRelativePath);
 
             return _directorySearchServant.SearchAppSettings(relativeDropboxPath);
         }

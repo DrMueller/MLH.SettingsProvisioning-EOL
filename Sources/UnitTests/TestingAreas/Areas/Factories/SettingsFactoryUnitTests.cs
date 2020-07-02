@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using Microsoft.Extensions.Configuration;
+using Mmu.Mlh.ApplicationExtensions.Areas.Dropbox.Services;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories.Implementation;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories.Servants;
 using Mmu.Mlh.SettingsProvisioning.Areas.Models;
@@ -16,6 +17,7 @@ namespace Mmu.Mlh.SettingsProvisioning.UnitTests.TestingAreas.Areas.Factories
         private Mock<IDirectorySearchServant> _directorySearchServantMock;
         private Mock<IFileSystem> _fileSystemMock;
         private Mock<ISectionConfigurationServant> _sectionConfigurationServantMock;
+        private Mock<IDropboxLocator> _dropboxLocatorMock;
         private SettingsFactory _sut;
 
         [SetUp]
@@ -25,11 +27,13 @@ namespace Mmu.Mlh.SettingsProvisioning.UnitTests.TestingAreas.Areas.Factories
             _configurationRootFactoryMock = new Mock<IConfigurationRootFactory>();
             _sectionConfigurationServantMock = new Mock<ISectionConfigurationServant>();
             _fileSystemMock = new Mock<IFileSystem>();
+            _dropboxLocatorMock = new Mock<IDropboxLocator>();
 
             _sut = new SettingsFactory(
                 _directorySearchServantMock.Object,
                 _configurationRootFactoryMock.Object,
                 _sectionConfigurationServantMock.Object,
+                _dropboxLocatorMock.Object,
                 _fileSystemMock.Object);
         }
 
