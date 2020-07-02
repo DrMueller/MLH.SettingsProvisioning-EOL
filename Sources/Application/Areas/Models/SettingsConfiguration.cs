@@ -4,11 +4,6 @@ namespace Mmu.Mlh.SettingsProvisioning.Areas.Models
 {
     public class SettingsConfiguration
     {
-        public string BaseDirectoryOrFilePath { get; }
-        public string DropboxRelativePath { get; }
-        public string EnvironmentName { get; }
-        public string SettingsSectionKey { get; }
-
         public SettingsConfiguration(
             string settingsSectionKey,
             string environmentName,
@@ -22,5 +17,10 @@ namespace Mmu.Mlh.SettingsProvisioning.Areas.Models
             BaseDirectoryOrFilePath = baseDirectoryOrFilePath;
             DropboxRelativePath = dropboxRelativePath;
         }
+
+        public string BaseDirectoryOrFilePath { get; }
+        public string DropboxRelativePath { get; }
+        public string EnvironmentName { get; }
+        public string SettingsSectionKey { get; }
     }
 }
