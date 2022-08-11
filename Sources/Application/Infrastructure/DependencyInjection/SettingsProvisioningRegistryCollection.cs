@@ -18,11 +18,9 @@ namespace Mmu.Mlh.SettingsProvisioning.Infrastructure.DependencyInjection
                     scanner.WithDefaultConventions();
                 });
 
-            For<IFileSystem>().Use<FileSystem>();
-            For<ISettingsFactory>().Use<SettingsFactory>();
-            For<ISectionConfigurationServant>().Use<SectionConfigurationServant>();
-            For<IDirectorySearchServant>().Use<DirectorySearchServant>();
-            For<IConfigurationRootFactory>().Use<ConfigurationRootFactory>();
+            For<IFileSystem>().Use<FileSystem>().Singleton();
+            For<ISettingsFactory>().Use<SettingsFactory>().Singleton();
+            For<IDirectorySearchServant>().Use<DirectorySearchServant>().Singleton();
         }
     }
 }
